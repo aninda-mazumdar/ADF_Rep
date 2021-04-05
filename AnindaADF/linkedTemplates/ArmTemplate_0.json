@@ -794,9 +794,12 @@
 										},
 										"sink": {
 											"type": "AzureSqlSink",
-											"tableOption": "autoCreate"
+											"writeBatchSize": 0,
+											"tableOption": "autoCreate",
+											"disableMetricsCollection": false
 										},
 										"enableStaging": false,
+										"validateDataConsistency": false,
 										"translator": {
 											"type": "TabularTranslator",
 											"typeConversion": true,

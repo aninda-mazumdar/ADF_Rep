@@ -1,53 +1,20 @@
 {
-	"name": "CopySalesLT_Tables2Blob",
+	"name": "CopyFromOnPremise",
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Table",
-				"type": "Lookup",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT \n    *\nFROM\n    information_schema.tables\nWHERE\n\tTABLE_SCHEMA = 'SalesLT'\n\tand\n\tTABLE_TYPE = 'BASE TABLE'",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "GetTableNames_CopySalesLT_Tables2Blob",
-						"type": "DatasetReference"
-					},
-					"firstRowOnly": false
-				}
-			},
-			{
-				"name": "ForEachTable",
+				"name": "ForEach1",
 				"type": "ForEach",
-				"dependsOn": [
-					{
-						"activity": "Get Table",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get Table').output.value",
+						"value": "@pipeline().parameters.TableName",
 						"type": "Expression"
 					},
 					"activities": [
 						{
-							"name": "Copy Tables to Blob",
+							"name": "Copy data1",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -60,7 +27,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "AzureSqlSource",
+									"type": "SqlServerSource",
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
@@ -87,15 +54,11 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "TableSource_CopySalesLT_Tables2Blob",
+									"referenceName": "OnPremAdventureWorksDW2012",
 									"type": "DatasetReference",
 									"parameters": {
 										"TableName": {
-											"value": "@item().TABLE_NAME",
-											"type": "Expression"
-										},
-										"SchemaName": {
-											"value": "@item().TABLE_SCHEMA",
+											"value": "@item()",
 											"type": "Expression"
 										}
 									}
@@ -103,11 +66,11 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "Sink_CopySalesLT_Tables2Blob",
+									"referenceName": "Sink_CopyFromOnPremise",
 									"type": "DatasetReference",
 									"parameters": {
-										"FileName": {
-											"value": "@concat(item().TABLE_SCHEMA,'-',item().TABLE_NAME,'.csv')",
+										"Name": {
+											"value": "@item()",
 											"type": "Expression"
 										}
 									}
@@ -118,8 +81,19 @@
 				}
 			}
 		],
+		"parameters": {
+			"TableName": {
+				"type": "array",
+				"defaultValue": [
+					"DimProduct",
+					"DimProductCategory",
+					"DimProductSubcategory",
+					"FactInternetSales"
+				]
+			}
+		},
 		"annotations": [],
-		"lastPublishTime": "2021-04-05T06:34:20Z"
+		"lastPublishTime": "2021-04-05T09:43:07Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

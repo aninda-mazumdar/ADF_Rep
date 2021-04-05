@@ -361,8 +361,7 @@
 											"partitionOption": "None"
 										},
 										"sink": {
-											"type": "AzureSqlSink",
-											"tableOption": "autoCreate"
+											"type": "AzureSqlSink"
 										},
 										"enableStaging": false,
 										"translator": {
@@ -839,6 +838,35 @@
 				"typeProperties": {}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SinkData_Department_Employee22')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AnindaSampleDB",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo.",
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AnindaSampleDB')]"
+			]
 		}
 	]
 }

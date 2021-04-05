@@ -1,0 +1,98 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "AnindaADF"
+		},
+		"LS_AindaBlobStorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_AindaBlobStorage'"
+		},
+		"LS_AnindaSampleDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_AnindaSampleDB'"
+		},
+		"SelfHosted_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SelfHosted'"
+		},
+		"SelfHosted_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SelfHosted'"
+		},
+		"AdventureWorks2012_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AdventureWorks2012'"
+		},
+		"AdventureWorks2012_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AdventureWorks2012'"
+		},
+		"SelfHosted_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "DESKTOP-J9AI0BT\\anind"
+		},
+		"AdventureWorks2012_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "DESKTOP-J9AI0BT\\anind"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "AnindaADF_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_AindaBlobStorage_connectionString": {
+						"value": "[parameters('LS_AindaBlobStorage_connectionString')]"
+					},
+					"LS_AnindaSampleDB_connectionString": {
+						"value": "[parameters('LS_AnindaSampleDB_connectionString')]"
+					},
+					"SelfHosted_connectionString": {
+						"value": "[parameters('SelfHosted_connectionString')]"
+					},
+					"SelfHosted_password": {
+						"value": "[parameters('SelfHosted_password')]"
+					},
+					"AdventureWorks2012_connectionString": {
+						"value": "[parameters('AdventureWorks2012_connectionString')]"
+					},
+					"AdventureWorks2012_password": {
+						"value": "[parameters('AdventureWorks2012_password')]"
+					},
+					"SelfHosted_properties_typeProperties_userName": {
+						"value": "[parameters('SelfHosted_properties_typeProperties_userName')]"
+					},
+					"AdventureWorks2012_properties_typeProperties_userName": {
+						"value": "[parameters('AdventureWorks2012_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

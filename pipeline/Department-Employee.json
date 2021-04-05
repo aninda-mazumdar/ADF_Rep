@@ -100,7 +100,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"TableName": {
-											"value": "@activity('GetDepartmentNames').output.value",
+											"value": "@activity('GetDepartmentNames').output.value.name",
 											"type": "Expression"
 										}
 									}

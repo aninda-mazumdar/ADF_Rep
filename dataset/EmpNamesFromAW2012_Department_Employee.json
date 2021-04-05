@@ -1,5 +1,5 @@
 {
-	"name": "EmpNamesFromAW2012",
+	"name": "EmpNamesFromAW2012_Department_Employee",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AdventureWorks2012",

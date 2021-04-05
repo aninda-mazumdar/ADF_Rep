@@ -1,5 +1,5 @@
 {
-	"name": "DepartmentNames",
+	"name": "DepartmentNames_Department_Employee",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AdventureWorks2012",

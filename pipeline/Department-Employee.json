@@ -92,7 +92,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "EmpNamesFromAW2012",
+									"referenceName": "EmpNamesFromAW2012_Department_Employee",
 									"type": "DatasetReference"
 								}
 							],
@@ -129,7 +129,7 @@
 									"partitionOption": "None"
 								},
 								"dataset": {
-									"referenceName": "DepartmentNames",
+									"referenceName": "DepartmentNames_Department_Employee",
 									"type": "DatasetReference"
 								},
 								"firstRowOnly": true

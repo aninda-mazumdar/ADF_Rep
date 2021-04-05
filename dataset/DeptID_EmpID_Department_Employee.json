@@ -1,0 +1,16 @@
+{
+	"name": "DeptID_EmpID_Department_Employee",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdventureWorks2012",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "HumanResources",
+			"table": "EmployeeDepartmentHistory"
+		}
+	}
+}

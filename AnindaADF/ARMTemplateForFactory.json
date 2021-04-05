@@ -386,7 +386,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"TableName": {
-													"value": "@activity('GetDepartmentNames').output.value.name",
+													"value": "@activity('GetDepartmentNames').output.value",
 													"type": "Expression"
 												}
 											}

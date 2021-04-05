@@ -7,6 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "AnindaADF"
 		},
+		"AdventureWorks2012_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AdventureWorks2012'"
+		},
+		"AdventureWorks2012_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AdventureWorks2012'"
+		},
 		"LS_AindaBlobStorage_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_AindaBlobStorage'"
@@ -23,19 +31,11 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'SelfHosted'"
 		},
-		"AdventureWorks2012_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AdventureWorks2012'"
-		},
-		"AdventureWorks2012_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AdventureWorks2012'"
-		},
-		"SelfHosted_properties_typeProperties_userName": {
+		"AdventureWorks2012_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "DESKTOP-J9AI0BT\\anind"
 		},
-		"AdventureWorks2012_properties_typeProperties_userName": {
+		"SelfHosted_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "DESKTOP-J9AI0BT\\anind"
 		},
@@ -72,23 +72,23 @@
 					"LS_AnindaSampleDB_connectionString": {
 						"value": "[parameters('LS_AnindaSampleDB_connectionString')]"
 					},
-					"SelfHosted_connectionString": {
-						"value": "[parameters('SelfHosted_connectionString')]"
-					},
-					"SelfHosted_password": {
-						"value": "[parameters('SelfHosted_password')]"
-					},
 					"AdventureWorks2012_connectionString": {
 						"value": "[parameters('AdventureWorks2012_connectionString')]"
 					},
 					"AdventureWorks2012_password": {
 						"value": "[parameters('AdventureWorks2012_password')]"
 					},
-					"SelfHosted_properties_typeProperties_userName": {
-						"value": "[parameters('SelfHosted_properties_typeProperties_userName')]"
+					"SelfHosted_connectionString": {
+						"value": "[parameters('SelfHosted_connectionString')]"
+					},
+					"SelfHosted_password": {
+						"value": "[parameters('SelfHosted_password')]"
 					},
 					"AdventureWorks2012_properties_typeProperties_userName": {
 						"value": "[parameters('AdventureWorks2012_properties_typeProperties_userName')]"
+					},
+					"SelfHosted_properties_typeProperties_userName": {
+						"value": "[parameters('SelfHosted_properties_typeProperties_userName')]"
 					}
 				}
 			},

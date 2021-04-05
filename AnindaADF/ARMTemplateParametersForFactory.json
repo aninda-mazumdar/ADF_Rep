@@ -5,6 +5,12 @@
 		"factoryName": {
 			"value": "AnindaADF"
 		},
+		"AdventureWorks2012_connectionString": {
+			"value": ""
+		},
+		"AdventureWorks2012_password": {
+			"value": ""
+		},
 		"LS_AindaBlobStorage_connectionString": {
 			"value": ""
 		},
@@ -17,16 +23,10 @@
 		"SelfHosted_password": {
 			"value": ""
 		},
-		"AdventureWorks2012_connectionString": {
-			"value": ""
-		},
-		"AdventureWorks2012_password": {
-			"value": ""
-		},
-		"SelfHosted_properties_typeProperties_userName": {
+		"AdventureWorks2012_properties_typeProperties_userName": {
 			"value": "DESKTOP-J9AI0BT\\anind"
 		},
-		"AdventureWorks2012_properties_typeProperties_userName": {
+		"SelfHosted_properties_typeProperties_userName": {
 			"value": "DESKTOP-J9AI0BT\\anind"
 		}
 	}

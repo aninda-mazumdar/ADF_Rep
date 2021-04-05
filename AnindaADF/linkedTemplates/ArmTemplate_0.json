@@ -15,14 +15,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_AnindaSampleDB'"
 		},
-		"SelfHosted_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'SelfHosted'"
-		},
-		"SelfHosted_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'SelfHosted'"
-		},
 		"AdventureWorks2012_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AdventureWorks2012'"
@@ -31,11 +23,19 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AdventureWorks2012'"
 		},
-		"SelfHosted_properties_typeProperties_userName": {
+		"SelfHosted_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SelfHosted'"
+		},
+		"SelfHosted_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SelfHosted'"
+		},
+		"AdventureWorks2012_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "DESKTOP-J9AI0BT\\anind"
 		},
-		"AdventureWorks2012_properties_typeProperties_userName": {
+		"SelfHosted_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "DESKTOP-J9AI0BT\\anind"
 		}
@@ -93,6 +93,35 @@
 				"type": "AzureSqlTable",
 				"schema": [],
 				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AnindaSampleDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SinkData_Department_Employee')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AnindaSampleDB",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_AnindaSampleDB')]"
@@ -202,30 +231,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SelfHosted')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('SelfHosted_connectionString')]",
-					"userName": "[parameters('SelfHosted_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('SelfHosted_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "SelfHosted",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/SelfHosted')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/AdventureWorks2012')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -250,32 +255,27 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SinkData_Department_Employee')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/SelfHosted')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AnindaSampleDB",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"TableName": {
-						"type": "string"
-					}
-				},
 				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
+				"type": "SqlServer",
 				"typeProperties": {
-					"schema": "dbo",
-					"table": {
-						"value": "@dataset().TableName",
-						"type": "Expression"
+					"connectionString": "[parameters('SelfHosted_connectionString')]",
+					"userName": "[parameters('SelfHosted_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('SelfHosted_password')]"
 					}
+				},
+				"connectVia": {
+					"referenceName": "SelfHosted",
+					"type": "IntegrationRuntimeReference"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AnindaSampleDB')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/SelfHosted')]"
 			]
 		},
 		{
@@ -411,32 +411,44 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/OnPremAdventureWorksDW2012')]",
+			"name": "[concat(parameters('factoryName'), '/DepartmentNames')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "SelfHosted",
+					"referenceName": "AdventureWorks2012",
 					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"TableName": {
-						"type": "string"
-					}
 				},
 				"annotations": [],
 				"type": "SqlServerTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": {
-						"value": "@dataset().TableName",
-						"type": "Expression"
+				"schema": [
+					{
+						"name": "DepartmentID",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "GroupName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
 					}
+				],
+				"typeProperties": {
+					"schema": "HumanResources",
+					"table": "Department"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SelfHosted')]"
+				"[concat(variables('factoryId'), '/linkedServices/AdventureWorks2012')]"
 			]
 		},
 		{
@@ -539,44 +551,32 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DepartmentNames')]",
+			"name": "[concat(parameters('factoryName'), '/OnPremAdventureWorksDW2012')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AdventureWorks2012",
+					"referenceName": "SelfHosted",
 					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
 				},
 				"annotations": [],
 				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "DepartmentID",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "Name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "GroupName",
-						"type": "nvarchar"
-					},
-					{
-						"name": "ModifiedDate",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					}
-				],
+				"schema": [],
 				"typeProperties": {
-					"schema": "HumanResources",
-					"table": "Department"
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AdventureWorks2012')]"
+				"[concat(variables('factoryId'), '/linkedServices/SelfHosted')]"
 			]
 		},
 		{
@@ -789,7 +789,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"TableName": {
-													"value": "@activity('GetDepartmentNames').output.value",
+													"value": "@activity('GetDepartmentNames').output.value.name",
 													"type": "Expression"
 												}
 											}
@@ -811,7 +811,10 @@
 									"typeProperties": {
 										"source": {
 											"type": "SqlServerSource",
-											"sqlReaderQuery": "SELECT Name From [HumanResources].[Department] where [DepartmentID] = @{item().DepartmentID}",
+											"sqlReaderQuery": {
+												"value": "SELECT Name From [HumanResources].[Department] where [DepartmentID] = @{item().DepartmentID}",
+												"type": "Expression"
+											},
 											"queryTimeout": "02:00:00",
 											"partitionOption": "None"
 										},

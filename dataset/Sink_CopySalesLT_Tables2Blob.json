@@ -15,8 +15,11 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "Data",
-				"container": "tables-from-anindasampledb"
+				"fileName": {
+					"value": "@dataset().FileName",
+					"type": "Expression"
+				},
+				"container": "employee"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

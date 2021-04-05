@@ -69,7 +69,7 @@
 								"source": {
 									"type": "SqlServerSource",
 									"sqlReaderQuery": {
-										"value": "SELECT *\nFrom [Person].[Person]\nWhere [BusinessEntityID] = @{item().BusinessEntityID}",
+										"value": "SELECT [FirstName]\n      ,[MiddleName]\n      ,[LastName]\nFrom [Person].[Person]\nWhere [BusinessEntityID] = @{item().BusinessEntityID}",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",

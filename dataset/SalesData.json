@@ -1,0 +1,28 @@
+{
+	"name": "SalesData",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "MyDevice",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SheetName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": {
+				"value": "@dataset().SheetName",
+				"type": "Expression"
+			},
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": "SalesData.xlsx"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}

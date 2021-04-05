@@ -19,7 +19,7 @@
 					"value": "@dataset().FileName",
 					"type": "Expression"
 				},
-				"container": "employee"
+				"container": "tables-from-anindasampledb"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

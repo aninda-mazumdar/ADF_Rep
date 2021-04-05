@@ -732,6 +732,7 @@
 								"value": "@activity('Get_DeptID_EmpID').output.value",
 								"type": "Expression"
 							},
+							"isSequential": true,
 							"activities": [
 								{
 									"name": "Copy data to SQLDB",

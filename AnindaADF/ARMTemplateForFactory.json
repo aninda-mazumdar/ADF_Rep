@@ -354,17 +354,14 @@
 										"source": {
 											"type": "SqlServerSource",
 											"sqlReaderQuery": {
-												"value": "SELECT [FirstName]\n      ,[MiddleName]\n      ,[LastName]\nFrom [Person].[Person]\nWhere [BusinessEntityID] = @{item().BusinessEntityID}",
+												"value": "SELECT *\nFrom [Person].[Person]\nWhere [BusinessEntityID] = @{item().BusinessEntityID}",
 												"type": "Expression"
 											},
 											"queryTimeout": "02:00:00",
 											"partitionOption": "None"
 										},
 										"sink": {
-											"type": "AzureSqlSink",
-											"writeBatchSize": 0,
-											"tableOption": "autoCreate",
-											"disableMetricsCollection": false
+											"type": "AzureSqlSink"
 										},
 										"enableStaging": false,
 										"validateDataConsistency": false,
@@ -389,10 +386,7 @@
 											"referenceName": "SinkData_Department_Employee",
 											"type": "DatasetReference",
 											"parameters": {
-												"TableName": {
-													"value": "@activity('GetDepartmentNames').output.value",
-													"type": "Expression"
-												}
+												"TableName": "@{activity('GetDepartmentNames').output.firstRow.Name}"
 											}
 										}
 									]
@@ -424,7 +418,7 @@
 											"type": "DatasetReference",
 											"parameters": {}
 										},
-										"firstRowOnly": false
+										"firstRowOnly": true
 									}
 								}
 							]
@@ -740,8 +734,11 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "Data",
-						"container": "tables-from-anindasampledb"
+						"fileName": {
+							"value": "@dataset().FileName",
+							"type": "Expression"
+						},
+						"container": "employee"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",

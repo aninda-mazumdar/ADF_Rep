@@ -1,0 +1,24 @@
+{
+	"name": "SinkData_Department_Employee22",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AnindaSampleDB",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo.",
+			"table": {
+				"value": "@dataset().TableName",
+				"type": "Expression"
+			}
+		}
+	}
+}

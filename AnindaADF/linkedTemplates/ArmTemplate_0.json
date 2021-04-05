@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AdventureWorks2012'"
 		},
+		"MyDevice_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'MyDevice'"
+		},
 		"SelfHosted_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SelfHosted'"
@@ -35,6 +39,14 @@
 			"type": "string",
 			"defaultValue": "DESKTOP-J9AI0BT\\anind"
 		},
+		"MyDevice_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\Users\\anind\\Desktop"
+		},
+		"MyDevice_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "DESKTOP-J9AI0BT\\anind"
+		},
 		"SelfHosted_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "DESKTOP-J9AI0BT\\anind"
@@ -44,6 +56,26 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/XLS_k_saath_kuch_karna_hai')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/LS_AindaBlobStorage')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -215,7 +247,7 @@
 							"value": "@dataset().FileName",
 							"type": "Expression"
 						},
-						"container": "employee"
+						"container": "tables-from-anindasampledb"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -275,6 +307,30 @@
 					"password": {
 						"type": "SecureString",
 						"value": "[parameters('AdventureWorks2012_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "SelfHosted",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/SelfHosted')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MyDevice')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('MyDevice_properties_typeProperties_host')]",
+					"userId": "[parameters('MyDevice_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('MyDevice_password')]"
 					}
 				},
 				"connectVia": {
@@ -612,6 +668,39 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/SalesData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "MyDevice",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"SheetName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": {
+						"value": "@dataset().SheetName",
+						"type": "Expression"
+					},
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": "SalesData.xlsx"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/MyDevice')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/CopyFromOnPremise')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -713,161 +802,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/OnPremAdventureWorksDW2012')]",
 				"[concat(variables('factoryId'), '/datasets/Sink_CopyFromOnPremise')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Department-Employee')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Get_DeptID_EmpID",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "DeptID_EmpID_Department_Employee",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ForEachDeptID",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Get_DeptID_EmpID",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Get_DeptID_EmpID').output.value",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "Copy data to SQLDB",
-									"type": "Copy",
-									"dependsOn": [
-										{
-											"activity": "GetDepartmentNames",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "SqlServerSource",
-											"sqlReaderQuery": {
-												"value": "SELECT [FirstName]\n      ,[MiddleName]\n      ,[LastName]\nFrom [Person].[Person]\nWhere [BusinessEntityID] = @{item().BusinessEntityID}",
-												"type": "Expression"
-											},
-											"queryTimeout": "02:00:00",
-											"partitionOption": "None"
-										},
-										"sink": {
-											"type": "AzureSqlSink",
-											"tableOption": "autoCreate"
-										},
-										"enableStaging": false,
-										"validateDataConsistency": false,
-										"translator": {
-											"type": "TabularTranslator",
-											"typeConversion": true,
-											"typeConversionSettings": {
-												"allowDataTruncation": true,
-												"treatBooleanAsNumber": false
-											}
-										}
-									},
-									"inputs": [
-										{
-											"referenceName": "EmpNamesFromAW2012",
-											"type": "DatasetReference",
-											"parameters": {}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "SinkData_Department_Employee",
-											"type": "DatasetReference",
-											"parameters": {
-												"TableName": "@{activity('GetDepartmentNames').output.firstRow.Name}"
-											}
-										}
-									]
-								},
-								{
-									"name": "GetDepartmentNames",
-									"type": "Lookup",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "SqlServerSource",
-											"sqlReaderQuery": {
-												"value": "SELECT Name From [HumanResources].[Department] where [DepartmentID] = @{item().DepartmentID}",
-												"type": "Expression"
-											},
-											"queryTimeout": "02:00:00",
-											"partitionOption": "None"
-										},
-										"dataset": {
-											"referenceName": "DepartmentNames",
-											"type": "DatasetReference",
-											"parameters": {}
-										},
-										"firstRowOnly": true
-									}
-								}
-							]
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DeptID_EmpID_Department_Employee')]",
-				"[concat(variables('factoryId'), '/datasets/EmpNamesFromAW2012')]",
-				"[concat(variables('factoryId'), '/datasets/SinkData_Department_Employee')]",
-				"[concat(variables('factoryId'), '/datasets/DepartmentNames')]"
 			]
 		}
 	]

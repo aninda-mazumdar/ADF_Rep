@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_AnindaSampleDB'"
 		},
+		"MyDevice_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'MyDevice'"
+		},
 		"SelfHosted_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SelfHosted'"
@@ -32,6 +36,14 @@
 			"metadata": "Secure string for 'password' of 'SelfHosted'"
 		},
 		"AdventureWorks2012_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "DESKTOP-J9AI0BT\\anind"
+		},
+		"MyDevice_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\Users\\anind\\Desktop"
+		},
+		"MyDevice_properties_typeProperties_userId": {
 			"type": "string",
 			"defaultValue": "DESKTOP-J9AI0BT\\anind"
 		},
@@ -78,6 +90,9 @@
 					"AdventureWorks2012_password": {
 						"value": "[parameters('AdventureWorks2012_password')]"
 					},
+					"MyDevice_password": {
+						"value": "[parameters('MyDevice_password')]"
+					},
 					"SelfHosted_connectionString": {
 						"value": "[parameters('SelfHosted_connectionString')]"
 					},
@@ -87,12 +102,38 @@
 					"AdventureWorks2012_properties_typeProperties_userName": {
 						"value": "[parameters('AdventureWorks2012_properties_typeProperties_userName')]"
 					},
+					"MyDevice_properties_typeProperties_host": {
+						"value": "[parameters('MyDevice_properties_typeProperties_host')]"
+					},
+					"MyDevice_properties_typeProperties_userId": {
+						"value": "[parameters('MyDevice_properties_typeProperties_userId')]"
+					},
 					"SelfHosted_properties_typeProperties_userName": {
 						"value": "[parameters('SelfHosted_properties_typeProperties_userName')]"
 					}
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "AnindaADF_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'AnindaADF_ArmTemplate_0')]"
+			]
 		}
 	]
 }

@@ -65,15 +65,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Day4_EX1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/CleanDB_DimCustomer')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -354,12 +345,20 @@
 					"referenceName": "CleanDB_LS",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "AzureSqlTable",
 				"schema": [],
 				"typeProperties": {
 					"schema": "dbo",
-					"table": "Department"
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
 				}
 			},
 			"dependsOn": [
@@ -420,12 +419,26 @@
 						"Password": "HalfLyf"
 					}
 				},
+				"parameters": {
+					"SchemaName": {
+						"type": "string"
+					},
+					"TableName": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "SqlServerTable",
 				"schema": [],
 				"typeProperties": {
-					"schema": "HumanResources",
-					"table": "Department"
+					"schema": {
+						"value": "@dataset().SchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
 				}
 			},
 			"dependsOn": [
@@ -588,18 +601,34 @@
 							{
 								"referenceName": "Source_OnPrem_SqlServerTable_Day4_EX1",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"SchemaName": "HumanResources",
+									"TableName": {
+										"value": "@pipeline().parameters.TableName",
+										"type": "Expression"
+									}
+								}
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "SinkDB_Day4_EX1",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"TableName": {
+										"value": "@pipeline().parameters.TableName",
+										"type": "Expression"
+									}
+								}
 							}
 						]
 					}
 				],
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [

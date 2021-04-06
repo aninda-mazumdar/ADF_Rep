@@ -15,7 +15,7 @@
 		"type": "SqlServerTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "HumanResource",
+			"schema": "HumanResources",
 			"table": "Department"
 		}
 	}

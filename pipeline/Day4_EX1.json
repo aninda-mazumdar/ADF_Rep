@@ -42,7 +42,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "SinkDB",
+						"referenceName": "SinkDB_Day4_EX1",
 						"type": "DatasetReference"
 					}
 				]

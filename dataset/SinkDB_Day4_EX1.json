@@ -1,5 +1,5 @@
 {
-	"name": "SinkDB",
+	"name": "SinkDB_Day4_EX1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "CleanDB_LS",

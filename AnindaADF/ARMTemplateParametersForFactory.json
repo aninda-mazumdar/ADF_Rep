@@ -5,13 +5,7 @@
 		"factoryName": {
 			"value": "AnindaADF"
 		},
-		"AdventureWorks2012_connectionString": {
-			"value": ""
-		},
-		"AdventureWorks2012_password": {
-			"value": ""
-		},
-		"LS_AindaBlobStorage_connectionString": {
+		"CleanDB_LS_connectionString": {
 			"value": ""
 		},
 		"LS_AnindaCleanDb_connectionString": {
@@ -20,26 +14,8 @@
 		"LS_AnindaSampleDB_connectionString": {
 			"value": ""
 		},
-		"MyDevice_password": {
+		"SampleDB_LS_connectionString": {
 			"value": ""
-		},
-		"SelfHosted_connectionString": {
-			"value": ""
-		},
-		"SelfHosted_password": {
-			"value": ""
-		},
-		"AdventureWorks2012_properties_typeProperties_userName": {
-			"value": "DESKTOP-J9AI0BT\\anind"
-		},
-		"MyDevice_properties_typeProperties_host": {
-			"value": "C:\\Users\\anind\\Desktop"
-		},
-		"MyDevice_properties_typeProperties_userId": {
-			"value": "DESKTOP-J9AI0BT\\anind"
-		},
-		"SelfHosted_properties_typeProperties_userName": {
-			"value": "DESKTOP-J9AI0BT\\anind"
 		}
 	}
 }

@@ -7,17 +7,9 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "AnindaADF"
 		},
-		"AdventureWorks2012_connectionString": {
+		"CleanDB_LS_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AdventureWorks2012'"
-		},
-		"AdventureWorks2012_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AdventureWorks2012'"
-		},
-		"LS_AindaBlobStorage_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_AindaBlobStorage'"
+			"metadata": "Secure string for 'connectionString' of 'CleanDB_LS'"
 		},
 		"LS_AnindaCleanDb_connectionString": {
 			"type": "secureString",
@@ -27,33 +19,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_AnindaSampleDB'"
 		},
-		"MyDevice_password": {
+		"SampleDB_LS_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'MyDevice'"
-		},
-		"SelfHosted_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'SelfHosted'"
-		},
-		"SelfHosted_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'SelfHosted'"
-		},
-		"AdventureWorks2012_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "DESKTOP-J9AI0BT\\anind"
-		},
-		"MyDevice_properties_typeProperties_host": {
-			"type": "string",
-			"defaultValue": "C:\\Users\\anind\\Desktop"
-		},
-		"MyDevice_properties_typeProperties_userId": {
-			"type": "string",
-			"defaultValue": "DESKTOP-J9AI0BT\\anind"
-		},
-		"SelfHosted_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "DESKTOP-J9AI0BT\\anind"
+			"metadata": "Secure string for 'connectionString' of 'SampleDB_LS'"
 		},
 		"containerUri": {
 			"type": "string",
@@ -82,8 +50,8 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"LS_AindaBlobStorage_connectionString": {
-						"value": "[parameters('LS_AindaBlobStorage_connectionString')]"
+					"CleanDB_LS_connectionString": {
+						"value": "[parameters('CleanDB_LS_connectionString')]"
 					},
 					"LS_AnindaCleanDb_connectionString": {
 						"value": "[parameters('LS_AnindaCleanDb_connectionString')]"
@@ -91,32 +59,8 @@
 					"LS_AnindaSampleDB_connectionString": {
 						"value": "[parameters('LS_AnindaSampleDB_connectionString')]"
 					},
-					"AdventureWorks2012_connectionString": {
-						"value": "[parameters('AdventureWorks2012_connectionString')]"
-					},
-					"AdventureWorks2012_password": {
-						"value": "[parameters('AdventureWorks2012_password')]"
-					},
-					"MyDevice_password": {
-						"value": "[parameters('MyDevice_password')]"
-					},
-					"SelfHosted_connectionString": {
-						"value": "[parameters('SelfHosted_connectionString')]"
-					},
-					"SelfHosted_password": {
-						"value": "[parameters('SelfHosted_password')]"
-					},
-					"AdventureWorks2012_properties_typeProperties_userName": {
-						"value": "[parameters('AdventureWorks2012_properties_typeProperties_userName')]"
-					},
-					"MyDevice_properties_typeProperties_host": {
-						"value": "[parameters('MyDevice_properties_typeProperties_host')]"
-					},
-					"MyDevice_properties_typeProperties_userId": {
-						"value": "[parameters('MyDevice_properties_typeProperties_userId')]"
-					},
-					"SelfHosted_properties_typeProperties_userName": {
-						"value": "[parameters('SelfHosted_properties_typeProperties_userName')]"
+					"SampleDB_LS_connectionString": {
+						"value": "[parameters('SampleDB_LS_connectionString')]"
 					}
 				}
 			},

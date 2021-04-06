@@ -6,54 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "AnindaADF"
-		},
-		"LS_AindaBlobStorage_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_AindaBlobStorage'"
-		},
-		"LS_AnindaCleanDb_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_AnindaCleanDb'"
-		},
-		"LS_AnindaSampleDB_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_AnindaSampleDB'"
-		},
-		"AdventureWorks2012_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AdventureWorks2012'"
-		},
-		"AdventureWorks2012_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AdventureWorks2012'"
-		},
-		"MyDevice_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'MyDevice'"
-		},
-		"SelfHosted_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'SelfHosted'"
-		},
-		"SelfHosted_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'SelfHosted'"
-		},
-		"AdventureWorks2012_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "DESKTOP-J9AI0BT\\anind"
-		},
-		"MyDevice_properties_typeProperties_host": {
-			"type": "string",
-			"defaultValue": "C:\\Users\\anind\\Desktop"
-		},
-		"MyDevice_properties_typeProperties_userId": {
-			"type": "string",
-			"defaultValue": "DESKTOP-J9AI0BT\\anind"
-		},
-		"SelfHosted_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "DESKTOP-J9AI0BT\\anind"
 		}
 	},
 	"variables": {
@@ -61,53 +13,41 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/LS_AindaBlobStorage')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"name": "[concat(parameters('factoryName'), '/SCD_Pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('LS_AindaBlobStorage_connectionString')]"
-				}
+				"activities": [
+					{
+						"name": "SCD_DataFlow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "SCD_DataFlow",
+								"type": "DataFlowReference"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
 			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_AnindaCleanDb')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('LS_AnindaCleanDb_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_AnindaSampleDB')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('LS_AnindaSampleDB_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SelfHosted')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/SCD_DataFlow')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/CleanDB_DimCustomer')]",
@@ -164,9 +104,7 @@
 					"table": "DimCustomer"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AnindaCleanDb')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SampleDB_SalesLT')]",
@@ -249,81 +187,7 @@
 					"table": "Customer"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AnindaSampleDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AdventureWorks2012')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('AdventureWorks2012_connectionString')]",
-					"userName": "[parameters('AdventureWorks2012_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('AdventureWorks2012_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "SelfHosted",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/SelfHosted')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/MyDevice')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "FileServer",
-				"typeProperties": {
-					"host": "[parameters('MyDevice_properties_typeProperties_host')]",
-					"userId": "[parameters('MyDevice_properties_typeProperties_userId')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('MyDevice_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "SelfHosted",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/SelfHosted')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SelfHosted')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('SelfHosted_connectionString')]",
-					"userName": "[parameters('SelfHosted_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('SelfHosted_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "SelfHosted",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/SelfHosted')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SCD_DataFlow')]",
@@ -380,50 +244,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SampleDB_SalesLT')]",
 				"[concat(variables('factoryId'), '/datasets/CleanDB_DimCustomer')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SCD_Pipeline')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "SCD_DataFlow",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "SCD_DataFlow",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"SalesLT": {},
-									"DimCustomer": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/SCD_DataFlow')]"
 			]
 		}
 	]

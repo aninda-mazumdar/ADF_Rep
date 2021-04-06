@@ -4,16 +4,20 @@
 	"properties": {
 		"parameters": {
 			"ServerName": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "DESKTOP-J9AI0BT\\ANINDA"
 			},
 			"DatabaseName": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "AdventureWorks2012"
 			},
 			"UserName": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "DESKTOP-J9AI0BT\\anind"
 			},
 			"Password": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "HalfLyf"
 			}
 		},
 		"annotations": [],

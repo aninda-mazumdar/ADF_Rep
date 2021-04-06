@@ -75,7 +75,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "SinkDB",
+								"referenceName": "SinkDB_Day4_EX1",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -86,7 +86,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Source_OnPrem_SqlServerTable_Day4_EX1')]",
-				"[concat(variables('factoryId'), '/datasets/SinkDB')]"
+				"[concat(variables('factoryId'), '/datasets/SinkDB_Day4_EX1')]"
 			]
 		},
 		{
@@ -450,7 +450,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SinkDB')]",
+			"name": "[concat(parameters('factoryName'), '/SinkDB_Day4_EX1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -489,7 +489,7 @@
 				"type": "SqlServerTable",
 				"schema": [],
 				"typeProperties": {
-					"schema": "HumanResource",
+					"schema": "HumanResources",
 					"table": "Department"
 				}
 			},
@@ -517,16 +517,20 @@
 			"properties": {
 				"parameters": {
 					"ServerName": {
-						"type": "String"
+						"type": "String",
+						"defaultValue": "DESKTOP-J9AI0BT\\ANINDA"
 					},
 					"DatabaseName": {
-						"type": "String"
+						"type": "String",
+						"defaultValue": "AdventureWorks2012"
 					},
 					"UserName": {
-						"type": "String"
+						"type": "String",
+						"defaultValue": "DESKTOP-J9AI0BT\\anind"
 					},
 					"Password": {
-						"type": "String"
+						"type": "String",
+						"defaultValue": "HalfLyf"
 					}
 				},
 				"annotations": [],
@@ -535,9 +539,15 @@
 					"connectionString": "[parameters('Parameterised_OnPrem_SQL_Server_connectionString')]",
 					"userName": "[parameters('Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName')]",
 					"password": "@{linkedService().Password}"
+				},
+				"connectVia": {
+					"referenceName": "OnPrem-IntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/OnPrem-IntegrationRuntime')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SampleDB_LS')]",
@@ -675,6 +685,15 @@
 				"[concat(variables('factoryId'), '/datasets/SalesLT_Product')]",
 				"[concat(variables('factoryId'), '/datasets/DimProduct')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Day4_EX1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": []
+			},
+			"dependsOn": []
 		}
 	]
 }

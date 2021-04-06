@@ -11,13 +11,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'CleanDB_LS'"
 		},
-		"Parameterised_OnPrem_SQL_Server_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'Parameterised_OnPrem_SQL_Server'"
-		},
 		"SampleDB_LS_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SampleDB_LS'"
+		},
+		"Parameterised_OnPrem_SQL_Server_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Parameterised_OnPrem_SQL_Server'"
 		},
 		"Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName": {
 			"type": "string",
@@ -42,35 +42,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Parameterised_OnPrem_SQL_Server')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"parameters": {
-					"ServerName": {
-						"type": "String"
-					},
-					"DatabaseName": {
-						"type": "String"
-					},
-					"UserName": {
-						"type": "String"
-					},
-					"Password": {
-						"type": "String"
-					}
-				},
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('Parameterised_OnPrem_SQL_Server_connectionString')]",
-					"userName": "[parameters('Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName')]",
-					"password": "@{linkedService().Password}"
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/SampleDB_LS')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -90,6 +61,15 @@
 			"properties": {
 				"type": "SelfHosted",
 				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Day4_EX1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -366,7 +346,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SinkDB')]",
+			"name": "[concat(parameters('factoryName'), '/SinkDB_Day4_EX1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -384,6 +364,45 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/CleanDB_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parameterised_OnPrem_SQL_Server')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"ServerName": {
+						"type": "String",
+						"defaultValue": "DESKTOP-J9AI0BT\\ANINDA"
+					},
+					"DatabaseName": {
+						"type": "String",
+						"defaultValue": "AdventureWorks2012"
+					},
+					"UserName": {
+						"type": "String",
+						"defaultValue": "DESKTOP-J9AI0BT\\anind"
+					},
+					"Password": {
+						"type": "String",
+						"defaultValue": "HalfLyf"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('Parameterised_OnPrem_SQL_Server_connectionString')]",
+					"userName": "[parameters('Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName')]",
+					"password": "@{linkedService().Password}"
+				},
+				"connectVia": {
+					"referenceName": "OnPrem-IntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/OnPrem-IntegrationRuntime')]"
 			]
 		},
 		{
@@ -405,73 +424,12 @@
 				"type": "SqlServerTable",
 				"schema": [],
 				"typeProperties": {
-					"schema": "HumanResource",
+					"schema": "HumanResources",
 					"table": "Department"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/Parameterised_OnPrem_SQL_Server')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Day4_EX1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"tableOption": "autoCreate"
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "Source_OnPrem_SqlServerTable_Day4_EX1",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "SinkDB",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Source_OnPrem_SqlServerTable_Day4_EX1')]",
-				"[concat(variables('factoryId'), '/datasets/SinkDB')]"
 			]
 		},
 		{
@@ -586,6 +544,67 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SalesLT_Product')]",
 				"[concat(variables('factoryId'), '/datasets/DimProduct')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Day4_EX1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Source_OnPrem_SqlServerTable_Day4_EX1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SinkDB_Day4_EX1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Source_OnPrem_SqlServerTable_Day4_EX1')]",
+				"[concat(variables('factoryId'), '/datasets/SinkDB_Day4_EX1')]"
 			]
 		},
 		{

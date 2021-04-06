@@ -37,17 +37,35 @@
 				"inputs": [
 					{
 						"referenceName": "Source_OnPrem_SqlServerTable_Day4_EX1",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "HumanResources",
+							"TableName": {
+								"value": "@pipeline().parameters.TableName",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
 					{
 						"referenceName": "SinkDB_Day4_EX1",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": {
+								"value": "@pipeline().parameters.TableName",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
 		],
+		"parameters": {
+			"TableName": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }

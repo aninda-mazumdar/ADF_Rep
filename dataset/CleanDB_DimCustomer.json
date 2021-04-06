@@ -2,7 +2,7 @@
 	"name": "CleanDB_DimCustomer",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_AnindaCleanDb",
+			"referenceName": "CleanDB_LS",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],

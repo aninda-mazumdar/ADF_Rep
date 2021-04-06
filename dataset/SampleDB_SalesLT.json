@@ -2,7 +2,7 @@
 	"name": "SampleDB_SalesLT",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_AnindaSampleDB",
+			"referenceName": "SampleDB_LS",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],

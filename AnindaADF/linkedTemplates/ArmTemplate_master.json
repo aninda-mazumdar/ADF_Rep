@@ -11,9 +11,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'CleanDB_LS'"
 		},
+		"Parameterised_OnPrem_SQL_Server_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Parameterised_OnPrem_SQL_Server'"
+		},
 		"SampleDB_LS_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SampleDB_LS'"
+		},
+		"Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "@{linkedService().UserName}"
 		},
 		"containerUri": {
 			"type": "string",
@@ -45,8 +53,14 @@
 					"CleanDB_LS_connectionString": {
 						"value": "[parameters('CleanDB_LS_connectionString')]"
 					},
+					"Parameterised_OnPrem_SQL_Server_connectionString": {
+						"value": "[parameters('Parameterised_OnPrem_SQL_Server_connectionString')]"
+					},
 					"SampleDB_LS_connectionString": {
 						"value": "[parameters('SampleDB_LS_connectionString')]"
+					},
+					"Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName": {
+						"value": "[parameters('Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName')]"
 					}
 				}
 			},

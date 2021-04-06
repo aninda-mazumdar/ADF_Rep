@@ -8,8 +8,14 @@
 		"CleanDB_LS_connectionString": {
 			"value": ""
 		},
+		"Parameterised_OnPrem_SQL_Server_connectionString": {
+			"value": ""
+		},
 		"SampleDB_LS_connectionString": {
 			"value": ""
+		},
+		"Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName": {
+			"value": "@{linkedService().UserName}"
 		},
 		"containerUri": {
 			"value": ""

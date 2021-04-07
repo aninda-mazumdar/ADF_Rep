@@ -1,0 +1,19 @@
+{
+	"name": "Json1_Day4_EX6",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "anindaAzureBlobStorageLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Output",
+				"container": "out-put"
+			}
+		},
+		"schema": {}
+	}
+}

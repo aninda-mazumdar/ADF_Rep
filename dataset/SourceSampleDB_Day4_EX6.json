@@ -1,0 +1,12 @@
+{
+	"name": "SourceSampleDB_Day4_EX6",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SampleDB_LS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}

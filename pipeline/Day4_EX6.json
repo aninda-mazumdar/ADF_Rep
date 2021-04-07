@@ -1,0 +1,51 @@
+{
+	"name": "Day4_EX6",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Select\n\tc.FirstName+' '+c.LastName+' bought '+p.Name+' from '+\n\tc.SalesPerson+' worth '+cast(so.LineTotal as nvarchar)\nfrom\n\t[SalesLT].[SalesOrderDetail] so join [SalesLT].[SalesOrderHeader] sh\n\ton sh.salesorderid = so.salesorderid\n\tjoin [SalesLT].[Product] p on so.productid = p.productid\n\tjoin [SalesLT].[Customer] c on c.customerid = sh.customerid",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceSampleDB_Day4_EX6",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Json1_Day4_EX6",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}

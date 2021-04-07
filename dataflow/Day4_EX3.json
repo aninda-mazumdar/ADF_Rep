@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "SampleProductTable",
+						"referenceName": "SampleProductTable_Day4_EX3",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -15,35 +15,35 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Json1",
+						"referenceName": "Json1_Day4_EX3",
 						"type": "DatasetReference"
 					},
 					"name": "Red"
 				},
 				{
 					"dataset": {
-						"referenceName": "Json1",
+						"referenceName": "Json1_Day4_EX3",
 						"type": "DatasetReference"
 					},
 					"name": "Black"
 				},
 				{
 					"dataset": {
-						"referenceName": "Json1",
+						"referenceName": "Json1_Day4_EX3",
 						"type": "DatasetReference"
 					},
 					"name": "White"
 				},
 				{
 					"dataset": {
-						"referenceName": "Json1",
+						"referenceName": "Json1_Day4_EX3",
 						"type": "DatasetReference"
 					},
 					"name": "Blue"
 				},
 				{
 					"dataset": {
-						"referenceName": "Json1",
+						"referenceName": "Json1_Day4_EX3",
 						"type": "DatasetReference"
 					},
 					"name": "Others"

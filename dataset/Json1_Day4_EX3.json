@@ -1,5 +1,5 @@
 {
-	"name": "Json1",
+	"name": "Json1_Day4_EX3",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "anindaAzureBlobStorageLS",

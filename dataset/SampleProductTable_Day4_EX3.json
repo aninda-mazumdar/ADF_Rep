@@ -1,5 +1,5 @@
 {
-	"name": "SampleProductTable",
+	"name": "SampleProductTable_Day4_EX3",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "SampleDB_LS",

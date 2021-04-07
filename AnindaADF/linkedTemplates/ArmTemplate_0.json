@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SampleDB_LS'"
 		},
+		"anindaAzureBlobStorageLS_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'anindaAzureBlobStorageLS'"
+		},
 		"Parameterised_OnPrem_SQL_Server_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'Parameterised_OnPrem_SQL_Server'"
@@ -55,6 +59,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/anindaAzureBlobStorageLS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('anindaAzureBlobStorageLS_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/OnPrem-IntegrationRuntime')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -63,35 +80,6 @@
 				"typeProperties": {}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSqlTable1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "CleanDB_LS",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"TableName": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "Product",
-					"table": {
-						"value": "@dataset().TableName",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/CleanDB_LS')]"
-			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/CleanDB_DimCustomer')]",
@@ -171,6 +159,38 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/CleanDB_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "anindaAzureBlobStorageLS",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FileName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().FileName",
+							"type": "Expression"
+						},
+						"container": "conditional-split"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/anindaAzureBlobStorageLS')]"
 			]
 		},
 		{
@@ -600,38 +620,38 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "AzureSqlTable1",
+								"referenceName": "Json1",
 								"type": "DatasetReference"
 							},
-							"name": "sink1"
+							"name": "Red"
 						},
 						{
 							"dataset": {
-								"referenceName": "AzureSqlTable1",
+								"referenceName": "Json1",
 								"type": "DatasetReference"
 							},
-							"name": "sink2"
+							"name": "Black"
 						},
 						{
 							"dataset": {
-								"referenceName": "AzureSqlTable1",
+								"referenceName": "Json1",
 								"type": "DatasetReference"
 							},
-							"name": "sink3"
+							"name": "White"
 						},
 						{
 							"dataset": {
-								"referenceName": "AzureSqlTable1",
+								"referenceName": "Json1",
 								"type": "DatasetReference"
 							},
-							"name": "sink4"
+							"name": "Blue"
 						},
 						{
 							"dataset": {
-								"referenceName": "AzureSqlTable1",
+								"referenceName": "Json1",
 								"type": "DatasetReference"
 							},
-							"name": "sink5"
+							"name": "Others"
 						}
 					],
 					"transformations": [
@@ -639,12 +659,12 @@
 							"name": "ConditionalSplitOnColor"
 						}
 					],
-					"script": "source(output(\n\t\tProductID as integer,\n\t\tName as string,\n\t\tProductNumber as string,\n\t\tColor as string,\n\t\tStandardCost as decimal(19,4),\n\t\tListPrice as decimal(19,4),\n\t\tSize as string,\n\t\tWeight as decimal(8,2),\n\t\tProductCategoryID as integer,\n\t\tProductModelID as integer,\n\t\tSellStartDate as timestamp,\n\t\tSellEndDate as timestamp,\n\t\tDiscontinuedDate as timestamp,\n\t\tThumbNailPhoto as binary,\n\t\tThumbnailPhotoFileName as string,\n\t\trowguid as string,\n\t\tModifiedDate as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource1 split(Color=='Red',\n\tColor=='Black',\n\tColor=='White',\n\tColor=='Blue',\n\tdisjoint: false) ~> ConditionalSplitOnColor@(Red, Black, White, Blue, Others)\nConditionalSplitOnColor@Red sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1\nConditionalSplitOnColor@Black sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink2\nConditionalSplitOnColor@White sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink3\nConditionalSplitOnColor@Blue sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink4\nConditionalSplitOnColor@Others sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink5"
+					"script": "source(output(\n\t\tProductID as integer,\n\t\tName as string,\n\t\tProductNumber as string,\n\t\tColor as string,\n\t\tStandardCost as decimal(19,4),\n\t\tListPrice as decimal(19,4),\n\t\tSize as string,\n\t\tWeight as decimal(8,2),\n\t\tProductCategoryID as integer,\n\t\tProductModelID as integer,\n\t\tSellStartDate as timestamp,\n\t\tSellEndDate as timestamp,\n\t\tDiscontinuedDate as timestamp,\n\t\tThumbNailPhoto as binary,\n\t\tThumbnailPhotoFileName as string,\n\t\trowguid as string,\n\t\tModifiedDate as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource1 split(Color=='Red',\n\tColor=='Black',\n\tColor=='White',\n\tColor=='Blue',\n\tdisjoint: false) ~> ConditionalSplitOnColor@(Red, Black, White, Blue, Others)\nConditionalSplitOnColor@Red sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Red\nConditionalSplitOnColor@Black sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Black\nConditionalSplitOnColor@White sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> White\nConditionalSplitOnColor@Blue sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Blue\nConditionalSplitOnColor@Others sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Others"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SampleProductTable')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]"
+				"[concat(variables('factoryId'), '/datasets/Json1')]"
 			]
 		},
 		{
@@ -863,20 +883,20 @@
 								"parameters": {},
 								"datasetParameters": {
 									"source1": {},
-									"sink1": {
-										"TableName": "Red"
+									"Red": {
+										"FileName": "Red"
 									},
-									"sink2": {
-										"TableName": "Black"
+									"Black": {
+										"FileName": "Black"
 									},
-									"sink3": {
-										"TableName": "White"
+									"White": {
+										"FileName": "White"
 									},
-									"sink4": {
-										"TableName": "Blue"
+									"Blue": {
+										"FileName": "Blue"
 									},
-									"sink5": {
-										"TableName": "Others"
+									"Others": {
+										"FileName": "Others"
 									}
 								}
 							},

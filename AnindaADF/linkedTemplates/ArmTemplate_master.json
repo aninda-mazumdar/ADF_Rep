@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SampleDB_LS'"
 		},
+		"anindaAzureBlobStorageLS_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'anindaAzureBlobStorageLS'"
+		},
 		"Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "@{linkedService().UserName}"
@@ -55,6 +59,9 @@
 					},
 					"SampleDB_LS_connectionString": {
 						"value": "[parameters('SampleDB_LS_connectionString')]"
+					},
+					"anindaAzureBlobStorageLS_connectionString": {
+						"value": "[parameters('anindaAzureBlobStorageLS_connectionString')]"
 					},
 					"Parameterised_OnPrem_SQL_Server_connectionString": {
 						"value": "[parameters('Parameterised_OnPrem_SQL_Server_connectionString')]"

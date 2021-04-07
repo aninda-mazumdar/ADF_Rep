@@ -14,6 +14,9 @@
 		"SampleDB_LS_connectionString": {
 			"value": ""
 		},
+		"anindaAzureBlobStorageLS_connectionString": {
+			"value": ""
+		},
 		"Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName": {
 			"value": "@{linkedService().UserName}"
 		},

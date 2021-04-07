@@ -23,7 +23,7 @@
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "EX7/@dataset().FolderName",
+					"value": "EX7/@{dataset().FolderName}",
 					"type": "Expression"
 				},
 				"container": "out-put"

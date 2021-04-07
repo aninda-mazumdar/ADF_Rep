@@ -678,6 +678,10 @@
 									"TableName": {
 										"value": "@pipeline().parameters.TableName",
 										"type": "Expression"
+									},
+									"SchemaName": {
+										"value": "@pipeline().parameters.SchemaName",
+										"type": "Expression"
 									}
 								}
 							}

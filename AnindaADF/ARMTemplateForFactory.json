@@ -130,6 +130,10 @@
 									"TableName": {
 										"value": "@pipeline().parameters.TableName",
 										"type": "Expression"
+									},
+									"SchemaName": {
+										"value": "@pipeline().parameters.SchemaName",
+										"type": "Expression"
 									}
 								}
 							}
@@ -1481,13 +1485,19 @@
 				"parameters": {
 					"TableName": {
 						"type": "string"
+					},
+					"SchemaName": {
+						"type": "string"
 					}
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
 				"schema": [],
 				"typeProperties": {
-					"schema": "dbo",
+					"schema": {
+						"value": "@dataset().SchemaName",
+						"type": "Expression"
+					},
 					"table": {
 						"value": "@dataset().TableName",
 						"type": "Expression"

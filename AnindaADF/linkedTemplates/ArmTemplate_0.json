@@ -336,6 +336,84 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Person_Person_Day_EX5')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CleanDB_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "BusinessEntityID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "PersonType",
+						"type": "nchar"
+					},
+					{
+						"name": "NameStyle",
+						"type": "bit"
+					},
+					{
+						"name": "Title",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FirstName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MiddleName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LastName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Suffix",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EmailPromotion",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AdditionalContactInfo",
+						"type": "xml"
+					},
+					{
+						"name": "Demographics",
+						"type": "xml"
+					},
+					{
+						"name": "rowguid",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "Person",
+					"table": "Person"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CleanDB_LS')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/SalesLT_Product')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -440,6 +518,55 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/SampleDB_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Sales_SalesOrderQuotaHistory_Day_EX5')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CleanDB_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "BusinessEntityID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "QuotaDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "SalesQuota",
+						"type": "money",
+						"precision": 19,
+						"scale": 4
+					},
+					{
+						"name": "rowguid",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "Sales",
+					"table": "SalesPersonQuotaHistory"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CleanDB_LS')]"
 			]
 		},
 		{
@@ -664,6 +791,27 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Sink__Day_EX5')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CleanDB_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "Dbo",
+					"table": "Sum_of_Sales"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CleanDB_LS')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Parameterised_OnPrem_SQL_Server')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -727,154 +875,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/Parameterised_OnPrem_SQL_Server')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Source_OnPrem_SqlServerTable_Day4_EX1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Parameterised_OnPrem_SQL_Server",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"ServerName": "DESKTOP-J9AI0BT\\ANINDA",
-						"DatabaseName": "AdventureWorks2012",
-						"UserName": "DESKTOP-J9AI0BT\\anind",
-						"Password": "HalfLyf"
-					}
-				},
-				"parameters": {
-					"SchemaName": {
-						"type": "string"
-					},
-					"TableName": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().SchemaName",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().TableName",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Parameterised_OnPrem_SQL_Server')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SqlServerTable1_Day4_EX2')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Parameterised_OnPrem_SQL_Server",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"ServerName": "DESKTOP-J9AI0BT\\ANINDA",
-						"DatabaseName": "AdventureWorks2012",
-						"UserName": "DESKTOP-J9AI0BT\\anind",
-						"Password": "HalfLyf"
-					}
-				},
-				"parameters": {
-					"SchemaName": {
-						"type": "string"
-					},
-					"TableName": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().SchemaName",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().TableName",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Parameterised_OnPrem_SQL_Server')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Day4_EX3')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "SampleProductTable_Day4_EX3",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "Json1_Day4_EX3",
-								"type": "DatasetReference"
-							},
-							"name": "Red"
-						},
-						{
-							"dataset": {
-								"referenceName": "Json1_Day4_EX3",
-								"type": "DatasetReference"
-							},
-							"name": "Black"
-						},
-						{
-							"dataset": {
-								"referenceName": "Json1_Day4_EX3",
-								"type": "DatasetReference"
-							},
-							"name": "White"
-						},
-						{
-							"dataset": {
-								"referenceName": "Json1_Day4_EX3",
-								"type": "DatasetReference"
-							},
-							"name": "Blue"
-						},
-						{
-							"dataset": {
-								"referenceName": "Json1_Day4_EX3",
-								"type": "DatasetReference"
-							},
-							"name": "Others"
-						}
-					],
-					"transformations": [
-						{
-							"name": "ConditionalSplitOnColor"
-						}
-					],
-					"script": "source(output(\n\t\tProductID as integer,\n\t\tName as string,\n\t\tProductNumber as string,\n\t\tColor as string,\n\t\tStandardCost as decimal(19,4),\n\t\tListPrice as decimal(19,4),\n\t\tSize as string,\n\t\tWeight as decimal(8,2),\n\t\tProductCategoryID as integer,\n\t\tProductModelID as integer,\n\t\tSellStartDate as timestamp,\n\t\tSellEndDate as timestamp,\n\t\tDiscontinuedDate as timestamp,\n\t\tThumbNailPhoto as binary,\n\t\tThumbnailPhotoFileName as string,\n\t\trowguid as string,\n\t\tModifiedDate as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource1 split(Color=='Red',\n\tColor=='Black',\n\tColor=='White',\n\tColor=='Blue',\n\tdisjoint: false) ~> ConditionalSplitOnColor@(Red, Black, White, Blue, Others)\nConditionalSplitOnColor@Red sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Red'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Red\nConditionalSplitOnColor@Black sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Black'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Black\nConditionalSplitOnColor@White sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['White'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> White\nConditionalSplitOnColor@Blue sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Blue'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Blue\nConditionalSplitOnColor@Others sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Others'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Others"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SampleProductTable_Day4_EX3')]",
-				"[concat(variables('factoryId'), '/datasets/Json1_Day4_EX3')]"
 			]
 		}
 	]

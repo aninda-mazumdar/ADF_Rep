@@ -13,6 +13,195 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/Source_OnPrem_SqlServerTable_Day4_EX1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Parameterised_OnPrem_SQL_Server",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ServerName": "DESKTOP-J9AI0BT\\ANINDA",
+						"DatabaseName": "AdventureWorks2012",
+						"UserName": "DESKTOP-J9AI0BT\\anind",
+						"Password": "HalfLyf"
+					}
+				},
+				"parameters": {
+					"SchemaName": {
+						"type": "string"
+					},
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().SchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerTable1_Day4_EX2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Parameterised_OnPrem_SQL_Server",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ServerName": "DESKTOP-J9AI0BT\\ANINDA",
+						"DatabaseName": "AdventureWorks2012",
+						"UserName": "DESKTOP-J9AI0BT\\anind",
+						"Password": "HalfLyf"
+					}
+				},
+				"parameters": {
+					"SchemaName": {
+						"type": "string"
+					},
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().SchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Day4_EX3')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "SampleProductTable_Day4_EX3",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Json1_Day4_EX3",
+								"type": "DatasetReference"
+							},
+							"name": "Red"
+						},
+						{
+							"dataset": {
+								"referenceName": "Json1_Day4_EX3",
+								"type": "DatasetReference"
+							},
+							"name": "Black"
+						},
+						{
+							"dataset": {
+								"referenceName": "Json1_Day4_EX3",
+								"type": "DatasetReference"
+							},
+							"name": "White"
+						},
+						{
+							"dataset": {
+								"referenceName": "Json1_Day4_EX3",
+								"type": "DatasetReference"
+							},
+							"name": "Blue"
+						},
+						{
+							"dataset": {
+								"referenceName": "Json1_Day4_EX3",
+								"type": "DatasetReference"
+							},
+							"name": "Others"
+						}
+					],
+					"transformations": [
+						{
+							"name": "ConditionalSplitOnColor"
+						}
+					],
+					"script": "source(output(\n\t\tProductID as integer,\n\t\tName as string,\n\t\tProductNumber as string,\n\t\tColor as string,\n\t\tStandardCost as decimal(19,4),\n\t\tListPrice as decimal(19,4),\n\t\tSize as string,\n\t\tWeight as decimal(8,2),\n\t\tProductCategoryID as integer,\n\t\tProductModelID as integer,\n\t\tSellStartDate as timestamp,\n\t\tSellEndDate as timestamp,\n\t\tDiscontinuedDate as timestamp,\n\t\tThumbNailPhoto as binary,\n\t\tThumbnailPhotoFileName as string,\n\t\trowguid as string,\n\t\tModifiedDate as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource1 split(Color=='Red',\n\tColor=='Black',\n\tColor=='White',\n\tColor=='Blue',\n\tdisjoint: false) ~> ConditionalSplitOnColor@(Red, Black, White, Blue, Others)\nConditionalSplitOnColor@Red sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Red'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Red\nConditionalSplitOnColor@Black sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Black'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Black\nConditionalSplitOnColor@White sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['White'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> White\nConditionalSplitOnColor@Blue sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Blue'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Blue\nConditionalSplitOnColor@Others sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Others'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Others"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Day4_EX5')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Sales_SalesOrderQuotaHistory_Day_EX5",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "Person_Person_Day_EX5",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Sink__Day_EX5",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Aggregate1"
+						},
+						{
+							"name": "Join1"
+						},
+						{
+							"name": "Select1"
+						}
+					],
+					"script": "source(output(\n\t\tBusinessEntityID as integer,\n\t\tQuotaDate as timestamp,\n\t\tSalesQuota as decimal(19,4),\n\t\trowguid as string,\n\t\tModifiedDate as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource(output(\n\t\tBusinessEntityID as integer,\n\t\tPersonType as string,\n\t\tNameStyle as boolean,\n\t\tTitle as string,\n\t\tFirstName as string,\n\t\tMiddleName as string,\n\t\tLastName as string,\n\t\tSuffix as string,\n\t\tEmailPromotion as integer,\n\t\tAdditionalContactInfo as string,\n\t\tDemographics as string,\n\t\trowguid as string,\n\t\tModifiedDate as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nsource1 aggregate(groupBy(BusinessEntityID),\n\tSum_of_Sales = sum(SalesQuota)) ~> Aggregate1\nAggregate1, source2 join(Aggregate1@BusinessEntityID == source2@BusinessEntityID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> Join1\nJoin1 select(mapColumn(\n\t\tBusinessEntityID = Aggregate1@BusinessEntityID,\n\t\tFirstName,\n\t\tLastName,\n\t\tSum_of_Sales\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/SCD_DataFlow')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -192,7 +381,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Source_OnPrem_SqlServerTable_Day4_EX1')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Day4_EX2')]",
@@ -279,7 +470,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SqlServerTable1_Day4_EX2')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Day4_EX3')]",
@@ -334,7 +527,9 @@
 				],
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Day4_EX3')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Day4_EX4')]",
@@ -457,6 +652,50 @@
 				"annotations": []
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Day4_EX5')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Day4_EX5",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Day4_EX5",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"source2": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Day4_EX5')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SCD_Pipeline')]",

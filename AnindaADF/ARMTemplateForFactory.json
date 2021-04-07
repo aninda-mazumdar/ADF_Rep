@@ -107,7 +107,10 @@
 								"referenceName": "Source_OnPrem_SqlServerTable_Day4_EX1",
 								"type": "DatasetReference",
 								"parameters": {
-									"SchemaName": "HumanResources",
+									"SchemaName": {
+										"value": "@pipeline().parameters.SchemaName",
+										"type": "Expression"
+									},
 									"TableName": {
 										"value": "@pipeline().parameters.TableName",
 										"type": "Expression"
@@ -131,6 +134,9 @@
 				],
 				"parameters": {
 					"TableName": {
+						"type": "string"
+					},
+					"SchemaName": {
 						"type": "string"
 					}
 				},

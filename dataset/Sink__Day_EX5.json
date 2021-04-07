@@ -1,0 +1,16 @@
+{
+	"name": "Sink__Day_EX5",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "CleanDB_LS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "Dbo",
+			"table": "Sum_of_Sales"
+		}
+	}
+}

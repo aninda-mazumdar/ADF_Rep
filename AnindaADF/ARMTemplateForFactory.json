@@ -355,7 +355,7 @@
 										"source": {
 											"type": "SqlServerSource",
 											"sqlReaderQuery": {
-												"value": "SELECT [ProductID],\n\t\t[Name],\n\t\t[ProductNumber],\n\t\t[FinishedGoodsFlag],\n\t\t[Color]\nFROM [AdventureWorks2012].[Production].[Product]\nWhere [FinishedGoodsFlag]=@{item().FinishedGoodsFlag}",
+												"value": "SELECT [ProductID],\n\t\t[Name],\n\t\t[ProductNumber],\n\t\t[FinishedGoodsFlag],\n\t\t[Color]\nFROM [AdventureWorks2012].[Production].[Product]\nWhere [FinishedGoodsFlag]= '@{item().FinishedGoodsFlag}'",
 												"type": "Expression"
 											},
 											"queryTimeout": "02:00:00",

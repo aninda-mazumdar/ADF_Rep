@@ -269,7 +269,7 @@
 							"value": "@dataset().FileName",
 							"type": "Expression"
 						},
-						"fileSystem": "data"
+						"fileSystem": "out-data"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",

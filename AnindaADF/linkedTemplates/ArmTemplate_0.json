@@ -27,10 +27,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'anindaAzureBlobStorageLS'"
 		},
-		"Parameterised_OnPrem_SQL_Server_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'Parameterised_OnPrem_SQL_Server'"
-		},
 		"AzureDataLakeStorageGen2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsg2aninda.dfs.core.windows.net/"
@@ -54,10 +50,6 @@
 		"AzureDataLakeStore1_properties_typeProperties_resourceGroupName": {
 			"type": "string",
 			"defaultValue": "Aninda_LTI_RG"
-		},
-		"Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "@{linkedService().UserName}"
 		}
 	},
 	"variables": {
@@ -327,6 +319,30 @@
 							"type": "Expression"
 						},
 						"container": "conditional-split"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/anindaAzureBlobStorageLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json1_Day4_EX6')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "anindaAzureBlobStorageLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Output",
+						"container": "out-put"
 					}
 				},
 				"schema": {}
@@ -812,69 +828,21 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Parameterised_OnPrem_SQL_Server')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"parameters": {
-					"ServerName": {
-						"type": "String",
-						"defaultValue": "DESKTOP-J9AI0BT\\ANINDA"
-					},
-					"DatabaseName": {
-						"type": "String",
-						"defaultValue": "AdventureWorks2012"
-					},
-					"UserName": {
-						"type": "String",
-						"defaultValue": "DESKTOP-J9AI0BT\\anind"
-					},
-					"Password": {
-						"type": "String",
-						"defaultValue": "HalfLyf"
-					}
-				},
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('Parameterised_OnPrem_SQL_Server_connectionString')]",
-					"userName": "[parameters('Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName')]",
-					"password": "@{linkedService().Password}"
-				},
-				"connectVia": {
-					"referenceName": "OnPrem-IntegrationRuntime",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/OnPrem-IntegrationRuntime')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/GetValuesBasedOnCondition_Day4_EX4')]",
+			"name": "[concat(parameters('factoryName'), '/SourceSampleDB_Day4_EX6')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "Parameterised_OnPrem_SQL_Server",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"ServerName": "DESKTOP-J9AI0BT\\ANINDA",
-						"DatabaseName": "AdventureWorks2012",
-						"UserName": "DESKTOP-J9AI0BT\\anind",
-						"Password": "HalfLyf"
-					}
+					"referenceName": "SampleDB_LS",
+					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "SqlServerTable",
+				"type": "AzureSqlTable",
 				"schema": [],
-				"typeProperties": {
-					"schema": "Production",
-					"table": "Product"
-				}
+				"typeProperties": {}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Parameterised_OnPrem_SQL_Server')]"
+				"[concat(variables('factoryId'), '/linkedServices/SampleDB_LS')]"
 			]
 		}
 	]

@@ -458,6 +458,65 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Day4_EX6')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Select\n\tc.FirstName+' '+c.LastName+' bought '+p.Name+' from '+\n\tc.SalesPerson+' worth '+cast(so.LineTotal as nvarchar)\nfrom\n\t[SalesLT].[SalesOrderDetail] so join [SalesLT].[SalesOrderHeader] sh\n\ton sh.salesorderid = so.salesorderid\n\tjoin [SalesLT].[Product] p on so.productid = p.productid\n\tjoin [SalesLT].[Customer] c on c.customerid = sh.customerid",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceSampleDB_Day4_EX6",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Json1_Day4_EX6",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceSampleDB_Day4_EX6')]",
+				"[concat(variables('factoryId'), '/datasets/Json1_Day4_EX6')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/SCD_Pipeline')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -748,6 +807,30 @@
 							"type": "Expression"
 						},
 						"container": "conditional-split"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/anindaAzureBlobStorageLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json1_Day4_EX6')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "anindaAzureBlobStorageLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Output",
+						"container": "out-put"
 					}
 				},
 				"schema": {}
@@ -1230,6 +1313,24 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/CleanDB_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceSampleDB_Day4_EX6')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SampleDB_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SampleDB_LS')]"
 			]
 		},
 		{

@@ -101,9 +101,6 @@
 					"anindaAzureBlobStorageLS_connectionString": {
 						"value": "[parameters('anindaAzureBlobStorageLS_connectionString')]"
 					},
-					"Parameterised_OnPrem_SQL_Server_connectionString": {
-						"value": "[parameters('Parameterised_OnPrem_SQL_Server_connectionString')]"
-					},
 					"AzureDataLakeStorageGen2_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorageGen2_properties_typeProperties_url')]"
 					},
@@ -121,9 +118,6 @@
 					},
 					"AzureDataLakeStore1_properties_typeProperties_resourceGroupName": {
 						"value": "[parameters('AzureDataLakeStore1_properties_typeProperties_resourceGroupName')]"
-					},
-					"Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName": {
-						"value": "[parameters('Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -142,6 +136,12 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"Parameterised_OnPrem_SQL_Server_connectionString": {
+						"value": "[parameters('Parameterised_OnPrem_SQL_Server_connectionString')]"
+					},
+					"Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName": {
+						"value": "[parameters('Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName')]"
 					}
 				}
 			},

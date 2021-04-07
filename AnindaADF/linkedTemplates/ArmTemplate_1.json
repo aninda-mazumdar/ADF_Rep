@@ -6,12 +6,140 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "AnindaADF"
+		},
+		"Parameterised_OnPrem_SQL_Server_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Parameterised_OnPrem_SQL_Server'"
+		},
+		"Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "@{linkedService().UserName}"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Parameterised_OnPrem_SQL_Server')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"ServerName": {
+						"type": "String",
+						"defaultValue": "DESKTOP-J9AI0BT\\ANINDA"
+					},
+					"DatabaseName": {
+						"type": "String",
+						"defaultValue": "AdventureWorks2012"
+					},
+					"UserName": {
+						"type": "String",
+						"defaultValue": "DESKTOP-J9AI0BT\\anind"
+					},
+					"Password": {
+						"type": "String",
+						"defaultValue": "HalfLyf"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('Parameterised_OnPrem_SQL_Server_connectionString')]",
+					"userName": "[parameters('Parameterised_OnPrem_SQL_Server_properties_typeProperties_userName')]",
+					"password": "@{linkedService().Password}"
+				},
+				"connectVia": {
+					"referenceName": "OnPrem-IntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Day4_EX6')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "Select\n\tc.FirstName+' '+c.LastName+' bought '+p.Name+' from '+\n\tc.SalesPerson+' worth '+cast(so.LineTotal as nvarchar)\nfrom\n\t[SalesLT].[SalesOrderDetail] so join [SalesLT].[SalesOrderHeader] sh\n\ton sh.salesorderid = so.salesorderid\n\tjoin [SalesLT].[Product] p on so.productid = p.productid\n\tjoin [SalesLT].[Customer] c on c.customerid = sh.customerid",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceSampleDB_Day4_EX6",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Json1_Day4_EX6",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/GetValuesBasedOnCondition_Day4_EX4')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Parameterised_OnPrem_SQL_Server",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ServerName": "DESKTOP-J9AI0BT\\ANINDA",
+						"DatabaseName": "AdventureWorks2012",
+						"UserName": "DESKTOP-J9AI0BT\\anind",
+						"Password": "HalfLyf"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "Production",
+					"table": "Product"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Parameterised_OnPrem_SQL_Server')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Source_OnPrem_SqlServerTable_Day4_EX1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
@@ -49,7 +177,9 @@
 					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Parameterised_OnPrem_SQL_Server')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SqlServerTable1_Day4_EX2')]",
@@ -88,7 +218,9 @@
 					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Parameterised_OnPrem_SQL_Server')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Day4_EX3')]",
@@ -651,7 +783,9 @@
 				],
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/GetValuesBasedOnCondition_Day4_EX4')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Day4_EX5')]",

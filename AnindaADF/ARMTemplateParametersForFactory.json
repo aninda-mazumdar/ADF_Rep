@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "AnindaADF"
 		},
+		"AzureDataLakeStorageGen2_accountKey": {
+			"value": ""
+		},
 		"AzureDataLakeStore1_servicePrincipalKey": {
 			"value": ""
 		},
@@ -19,6 +22,9 @@
 		},
 		"anindaAzureBlobStorageLS_connectionString": {
 			"value": ""
+		},
+		"AzureDataLakeStorageGen2_properties_typeProperties_url": {
+			"value": "https://adlsg2aninda.dfs.core.windows.net/"
 		},
 		"AzureDataLakeStore1_properties_typeProperties_dataLakeStoreUri": {
 			"value": "https://anindaadlsg1.azuredatalakestore.net/webhdfs/v1"

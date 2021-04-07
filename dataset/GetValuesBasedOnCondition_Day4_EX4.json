@@ -1,0 +1,22 @@
+{
+	"name": "GetValuesBasedOnCondition_Day4_EX4",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Parameterised_OnPrem_SQL_Server",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"ServerName": "DESKTOP-J9AI0BT\\ANINDA",
+				"DatabaseName": "AdventureWorks2012",
+				"UserName": "DESKTOP-J9AI0BT\\anind",
+				"Password": "HalfLyf"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "Production",
+			"table": "Product"
+		}
+	}
+}

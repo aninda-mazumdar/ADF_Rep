@@ -1,0 +1,37 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "AnindaADF"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStore1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDataLakeStore",
+				"typeProperties": {
+					"dataLakeStoreUri": "https://anindaadlsg1.azuredatalakestore.net/webhdfs/v1",
+					"servicePrincipalId": "f24fe9b5-ca7f-4d67-b5b8-e40c0f3b731a",
+					"servicePrincipalKey": {
+						"type": "SecureString",
+						"value": "**********"
+					},
+					"tenant": "744c61e2-92f9-487d-8a60-6455e8691161",
+					"subscriptionId": "76be055b-b7e2-435b-ba97-b6c79fed01e1",
+					"resourceGroupName": "Aninda_LTI_RG"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

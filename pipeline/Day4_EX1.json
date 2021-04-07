@@ -46,6 +46,10 @@
 							"TableName": {
 								"value": "@pipeline().parameters.TableName",
 								"type": "Expression"
+							},
+							"DatabaseName": {
+								"value": "@pipeline().parameters.DatabaseName",
+								"type": "Expression"
 							}
 						}
 					}
@@ -70,6 +74,10 @@
 			},
 			"SchemaName": {
 				"type": "string"
+			},
+			"DatabaseName": {
+				"type": "string",
+				"defaultValue": "AdventureWorks2012"
 			}
 		},
 		"annotations": []

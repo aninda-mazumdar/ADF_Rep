@@ -1,0 +1,36 @@
+{
+	"name": "SqlServerTable1_Day4_EX2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Parameterised_OnPrem_SQL_Server",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"ServerName": "DESKTOP-J9AI0BT\\ANINDA",
+				"DatabaseName": "AdventureWorks2012",
+				"UserName": "DESKTOP-J9AI0BT\\anind",
+				"Password": "HalfLyf"
+			}
+		},
+		"parameters": {
+			"SchemaName": {
+				"type": "string"
+			},
+			"TableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().SchemaName",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().TableName",
+				"type": "Expression"
+			}
+		}
+	}
+}

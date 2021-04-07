@@ -257,7 +257,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"FolderName": {
-													"value": "@concat(item().year,'/',item().month,'.csv')",
+													"value": "@{concat(item().year,'-',item().month,'.csv')}",
 													"type": "Expression"
 												},
 												"FileName": {

@@ -19,20 +19,20 @@
 						"referenceName": "Day4_EX3",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"sink1": {
-								"TableName": "Red"
+							"Red": {
+								"FileName": "Red"
 							},
-							"sink2": {
-								"TableName": "Black"
+							"Black": {
+								"FileName": "Black"
 							},
-							"sink3": {
-								"TableName": "White"
+							"White": {
+								"FileName": "White"
 							},
-							"sink4": {
-								"TableName": "Blue"
+							"Blue": {
+								"FileName": "Blue"
 							},
-							"sink5": {
-								"TableName": "Others"
+							"Others": {
+								"FileName": "Others"
 							}
 						}
 					},

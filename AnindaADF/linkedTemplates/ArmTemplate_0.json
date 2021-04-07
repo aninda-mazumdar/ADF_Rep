@@ -162,7 +162,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Json1')]",
+			"name": "[concat(parameters('factoryName'), '/Json1_Day4_EX3')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -386,7 +386,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SampleProductTable')]",
+			"name": "[concat(parameters('factoryName'), '/SampleProductTable_Day4_EX3')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -611,7 +611,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "SampleProductTable",
+								"referenceName": "SampleProductTable_Day4_EX3",
 								"type": "DatasetReference"
 							},
 							"name": "source1"
@@ -620,35 +620,35 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "Json1",
+								"referenceName": "Json1_Day4_EX3",
 								"type": "DatasetReference"
 							},
 							"name": "Red"
 						},
 						{
 							"dataset": {
-								"referenceName": "Json1",
+								"referenceName": "Json1_Day4_EX3",
 								"type": "DatasetReference"
 							},
 							"name": "Black"
 						},
 						{
 							"dataset": {
-								"referenceName": "Json1",
+								"referenceName": "Json1_Day4_EX3",
 								"type": "DatasetReference"
 							},
 							"name": "White"
 						},
 						{
 							"dataset": {
-								"referenceName": "Json1",
+								"referenceName": "Json1_Day4_EX3",
 								"type": "DatasetReference"
 							},
 							"name": "Blue"
 						},
 						{
 							"dataset": {
-								"referenceName": "Json1",
+								"referenceName": "Json1_Day4_EX3",
 								"type": "DatasetReference"
 							},
 							"name": "Others"
@@ -663,8 +663,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SampleProductTable')]",
-				"[concat(variables('factoryId'), '/datasets/Json1')]"
+				"[concat(variables('factoryId'), '/datasets/SampleProductTable_Day4_EX3')]",
+				"[concat(variables('factoryId'), '/datasets/Json1_Day4_EX3')]"
 			]
 		},
 		{

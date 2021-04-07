@@ -313,7 +313,10 @@
 					"type": "LinkedServiceReference",
 					"parameters": {
 						"ServerName": "DESKTOP-J9AI0BT\\ANINDA",
-						"DatabaseName": "AdventureWorks2012",
+						"DatabaseName": {
+							"value": "@dataset().DatabaseName",
+							"type": "Expression"
+						},
 						"UserName": "DESKTOP-J9AI0BT\\anind",
 						"Password": "HalfLyf"
 					}
@@ -323,6 +326,9 @@
 						"type": "string"
 					},
 					"TableName": {
+						"type": "string"
+					},
+					"DatabaseName": {
 						"type": "string"
 					}
 				},
@@ -656,6 +662,10 @@
 									"TableName": {
 										"value": "@pipeline().parameters.TableName",
 										"type": "Expression"
+									},
+									"DatabaseName": {
+										"value": "@pipeline().parameters.DatabaseName",
+										"type": "Expression"
 									}
 								}
 							}
@@ -680,6 +690,10 @@
 					},
 					"SchemaName": {
 						"type": "string"
+					},
+					"DatabaseName": {
+						"type": "string",
+						"defaultValue": "AdventureWorks2012"
 					}
 				},
 				"annotations": []

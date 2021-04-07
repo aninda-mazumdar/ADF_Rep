@@ -100,7 +100,7 @@
 									"referenceName": "DelimitedText1_Day4_EX4",
 									"type": "DatasetReference",
 									"parameters": {
-										"FileName": {
+										"FolderName": {
 											"value": "@{item().FinishedGoodsFlag}",
 											"type": "Expression"
 										}
